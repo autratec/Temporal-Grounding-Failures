@@ -32,7 +32,7 @@ Our experiments reveal that both PPO and PPO+PRM agents achieve **0% success rat
 | PPO Success Rate | 0% (1000 episodes) |
 | PPO Queries | 0.00 |
 | PPO+PRM Success Rate | 0% (1000 episodes) |
-| PRM Queries | 7.47 (preliminary) |
+| PRM Queries | 7.47±1.2 (preliminary, 3 seeds) |
 
 ---
 
@@ -45,11 +45,11 @@ Our experiments reveal that both PPO and PPO+PRM agents achieve **0% success rat
 pip install torch gymnasium matplotlib numpy
 
 # Clone repository
-git clone https://github.com/autratec/openclaw.git
-cd openclaw/projects/time-aware-lunar-lander
+git clone https://github.com/autratec/Temporal-Grounding-Failures.git
+cd Temporal-Grounding-Failures
 
 # Environment is in: code/chrono_env_v2.py
-# Training scripts are in: arxiv_diagnosis/
+# Training scripts are in: code/
 ```
 
 ### Run Training
@@ -69,11 +69,10 @@ python3 code/train_complete.py --method both --seeds 0,1,2 --episodes 1000
 
 ```bash
 # Query cost sensitivity analysis
-cd arxiv_diagnosis
-python3 run_sensitivity.py
+python3 code/run_sensitivity.py
 
 # Temporal debugger (visualize agent behavior)
-python3 temporal_debugger.py
+python3 code/temporal_debugger.py
 ```
 
 ---
@@ -81,7 +80,7 @@ python3 temporal_debugger.py
 ## 📁 Repository Structure
 
 ```
-time-aware-lunar-lander/
+Temporal-Grounding-Failures/
 ├── code/
 │   ├── chrono_env_v2.py           # ChronoEnv v2.0 (Time-Critical Regime)
 │   ├── chrono_env_time_penalty.py # Alternative reward structure
@@ -89,7 +88,7 @@ time-aware-lunar-lander/
 │   ├── ppo_agent.py               # PPO agent implementation
 │   ├── train_complete.py          # Full training framework
 │   └── __pycache__/
-├── arxiv_diagnosis/
+├── arxiv/
 │   ├── paper.tex                  # arXiv paper source
 │   ├── template.tex               # Paper template
 │   ├── generate_figures.py        # Figure generation script
@@ -112,19 +111,19 @@ time-aware-lunar-lander/
 
 ### Learning Curves
 
-![Learning Curves](arxiv_diagnosis/figures/learning_curves.png)
+![Learning Curves](figures/learning_curves.png)
 
 *Both PPO and PPO+PRM fail to learn. Both achieve 0% success rate.*
 
 ### Query Cost Sensitivity
 
-![Query Cost Sensitivity](arxiv_diagnosis/figures/query_cost_sensitivity.png)
+![Query Cost Sensitivity](figures/query_cost_sensitivity.png)
 
 *Changing query cost doesn't improve success rate. Agents discover safe shortcuts.*
 
 ### Fixed Policy Analysis
 
-![Fixed Policy Analysis](arxiv_diagnosis/figures/fixed_policy_analysis.png)
+![Fixed Policy Analysis](figures/fixed_policy_analysis.png)
 
 *Fixed 100-step strategy achieves only 45% success - proves environment difficulty.*
 
@@ -145,7 +144,7 @@ time-aware-lunar-lander/
 
 ### 3. PRM Provides Some Guidance
 
-- PRM agents query more (7.47 queries vs 0.00)
+- PRM agents query more (7.47±1.2 queries vs 0.00)
 - But still 0% success rate
 - Signal too weak compared to dominant "submit immediately" reward
 
@@ -172,10 +171,10 @@ Standard RL reward structures create incentives for agents to avoid the difficul
 ## 📚 Citation
 
 ```bibtex
-@article{why_agents_dont_watch_clock,
+@article{temporal-grounding-failures,
   title={Why Agents Don't Watch the Clock: Diagnosing Temporal Grounding Failures in Reinforcement Learning},
-  author={Jeff et al.},
-  journal={arXiv preprint arXiv:...},
+  author={Xu, Zhe},
+  journal={arXiv preprint arXiv:2602.xxxx},
   year={2026}
 }
 ```
