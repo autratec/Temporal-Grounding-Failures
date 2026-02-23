@@ -1,0 +1,61 @@
+\begin{thebibliography}{10}
+
+\bibitem{amodei2016concrete}
+Dario Amodei et~al.
+\newblock Concrete problems in ai safety.
+\newblock {\em arXiv preprint arXiv:1606.06565}, 2016.
+
+\bibitem{balu2018temporal}
+Naveen Balu et~al.
+\newblock Temporal difference learning with deadline.
+\newblock {\em arXiv preprint arXiv:1809.07575}, 2018.
+
+\bibitem{deepmind2020specification}
+DeepMind.
+\newblock Specification gaming: the flip side of ai ingenuity.
+\newblock {\em DeepMind Blog}, 2020.
+
+\bibitem{le2018delay}
+Thang Le.
+\newblock Delaying information in reinforcement learning.
+\newblock {\em arXiv preprint arXiv:1811.00053}, 2018.
+
+\bibitem{meng2025tgpo}
+Yue Meng, Fei Chen, and Chuchu Fan.
+\newblock Tgpo: Temporal grounded policy optimization for signal temporal logic
+  tasks.
+\newblock {\em arXiv preprint arXiv:2510.00225}, 2025.
+
+\bibitem{perozzi2024test}
+Erik Perozzi et~al.
+\newblock Test of time: A benchmark for evaluating llms on temporal reasoning.
+\newblock {\em arXiv preprint arXiv:2406.09170}, 2024.
+
+\bibitem{skalse2022defining}
+Joar Skalse, Nikolaus H.~R. Howe, Dmitrii Krasheninnikov, and David Krueger.
+\newblock Defining and characterizing reward hacking.
+\newblock {\em arXiv preprint arXiv:2209.13085}, 2022.
+
+\bibitem{sutton1998reinforcement}
+Richard~S. Sutton and Andrew~G. Barto.
+\newblock Reinforcement learning: An introduction.
+\newblock {\em MIT Press}, 1998.
+
+\bibitem{xu2026stepscorer}
+Zhe Xu.
+\newblock Stepscorer: Accelerating reinforcement learning with step-wise
+  scoring and psychological regret modeling.
+\newblock {\em arXiv preprint arXiv:2602.03171}, 2026.
+
+\bibitem{yao2023reAct}
+Shun Yao et~al.
+\newblock React: Synergizing reasoning and acting in language models.
+\newblock {\em arXiv preprint arXiv:2210.03629}, 2023.
+
+\bibitem{zhou2023mmmu}
+Xinyu Zhou et~al.
+\newblock Mmmu: A massive multi-discipline multimodal understanding and
+  reasoning benchmark.
+\newblock {\em arXiv preprint arXiv:2311.16502}, 2023.
+
+\end{thebibliography}

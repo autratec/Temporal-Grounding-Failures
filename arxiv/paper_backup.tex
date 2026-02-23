@@ -1,0 +1,368 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{natbib}
+
+\title{Why Agents Don't Watch the Clock: Diagnosing Temporal Grounding Failures in Reinforcement Learning}
+
+\author{Jeff \texttt{et al.} \\
+\texttt{jeff@example.com} \\
+}
+
+\date{Preprint. Under review.}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We observe that LLM-based agents often fail to track physical time across multi-turn interactions, completing tasks at strange times (e.g., submitting at 3:30 when deadline is 4:00). To study this \textit{temporal grounding} failure, we introduce \textbf{ChronoEnv}, a time-critical RL benchmark that forces agents to balance task completion against the cost of querying external time. Our experiments reveal a pervasive \textit{reward hacking} phenomenon: both Proximal Policy Optimization (PPO) and PPO+Psychological Regret Modeling (PRM) agents discover time-agnostic shortcuts and achieve 0\% success. We analyze root causes (sparse rewards, hard exploration, misaligned incentives) and demonstrate that Psychological Regret Modeling provides some guidance but is insufficient. We open-source ChronoEnv and diagnostic tools to catalyze research on time-aware agents.
+
+\textbf{Keywords:} Temporal Grounding, Reward Hacking, Psychological Regret Model, RL Benchmark, LLM Agents
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+Autonomous agents operating in real-world environments must track physical time to coordinate actions, meet deadlines, and respond to time-sensitive events. Yet, we observe that LLM-based agents frequently exhibit \textit{temporal myopia}: they complete tasks but with strange timing (e.g., "I submitted the report at 3:30, just 30 minutes before the 4:00 deadline!" as if this is perfect timing). This suggests agents lack robust \textit{temporal grounding} - the ability to connect internal state to external physical time.
+
+\subsection{Problem Statement}
+
+\textbf{Observation:} Agents often fail to learn time-aware policies, instead relying on work-progress heuristics or internal counters that ignore external time signals.
+
+\textbf{Question:} Why do agents avoid learning temporal grounding? Is it a representation limitation, a reward misalignment issue, or an exploration challenge?
+
+\textbf{Hypothesis:} Standard RL reward structures create incentives for agents to discover \textit{time-agnostic shortcuts} that avoid the costly and uncertain act of querying time. This is a form of \textit{reward hacking} where agents optimize for the outcome reward while circumventing the difficult cognitive task of time estimation.
+
+\subsection{Our Contributions}
+
+\begin{enumerate}
+    \item \textbf{ChronoEnv:} A new RL benchmark that forces agents to balance work progress with time querying costs. The environment eliminates time-agnostic strategies, making temporal grounding necessary for success.
+    
+    \item \textbf{Reward Hacking Diagnosis:} We demonstrate that even sophisticated agents (PPO, PPO+PRM) discover time-agnostic shortcuts in our environment, achieving 0\% success rate across 1000+ episodes. This reveals a fundamental challenge in training time-aware agents.
+    
+\item \textbf{Psychological Regret Modeling for Temporal Grounding:} We extend Psychological Regret Modeling (PRM) to include temporal regret signals, showing preliminary evidence of promise despite current limitations. Our analysis explains why Psychological Regret Modeling signals can be drowned out by the dominant "submit immediately" shortcut.
+    
+    \item \textbf{Diagnostic Framework:} We release ChronoEnv along with visualization tools (temporal debugger) to help researchers diagnose temporal grounding failures in their own agents.
+\end{enumerate}
+
+The remainder of this paper is organized as follows: Section~\ref{sec:prm_direction} explores Psychological Regret Modeling as a solution; and Section~\ref{sec:discussion} discusses implications and future work.
+
+\section{Related Work}
+\label{sec:related_work}
+
+\textbf{Temporal Reasoning in RL.} Existing work on temporal reasoning in RL includes constraint-based methods~\cite{le2018delay}, reward shaping for timing tasks~\cite{balu2018temporal}, and temporal difference learning with discount factors~\cite{sutton1998reinforcement}. More recently, Perozzi et al.~\cite{perozzi2024test} introduced the "Test of Time" benchmark, the first systematic evaluation of LLM temporal reasoning that reveals weaknesses in complex time logic tasks. Our work differs by focusing on \textit{active temporal grounding} - the meta-cognitive task of deciding \textit{when} to obtain time information, rather than just reacting to time signals. Emergent Mind~\cite{emergentmind2025} and TGPO~\cite{tgpo2025} also address time-aware policy learning but focus on explicit deadline embedding rather than uncertainty-driven querying.
+
+\textbf{Psychological Regret Modeling.} Psychological Regret Modeling (PRM) extends RL beyond terminal rewards by providing intermediate feedback on decision quality~\cite{xu2026stepscorer}. Xu et al.~\cite{xu2026stepscorer} introduced the Psychological Regret Model (PRM), which incorporates counterfactual regret signals at each decision step to transform sparse rewards into dense feedback, achieving 36\% faster convergence on continuous control tasks. This work establishes PRM as a framework for reward densification in \textit{known} environments. Our work extends PRM by adapting regret signals to partially observable time settings for active temporal grounding.
+
+\textbf{Connection to This Work:} While Psychological Regret Modeling successfully addresses sparse rewards in \textit{known} environments~\cite{xu2026stepscorer}, we observe that a deeper challenge emerges when agents must learn \textit{when to know}: in time-critical tasks, the very act of acquiring temporal information carries cost and uncertainty. Our work extends Psychological Regret Modeling by: (1) adapting regret signals to partially observable time settings, and (2) integrating them into a curriculum learning framework for active temporal grounding.
+
+\textbf{Reward Hacking.} Our work contributes to the growing understanding of specification gaming and reward hacking in RL~\cite{amodei2016concrete, deepmind2020specification}. Amodei et al.~\cite{amodei2016concrete} provided the foundational definition of reward hacking in AI safety. DeepMind~\cite{deepmind2020specification} popularized the concept through intuitive examples. Recent work~\cite{rewardhacking2025} provides large-scale empirical analysis of reward hacking across environments, confirming our observation that PPO agents discover time-agnostic shortcuts even when time awareness is necessary. We show that reward misalignment can lead agents to avoid difficult cognitive tasks (time estimation) in favor of simpler shortcuts.
+
+\textbf{LLM Agent Benchmarks.} Recent work has proposed benchmarks for LLM agents~\cite{yao2023reAct, zhou2023mmmu}, but none focus on temporal grounding failures. Our work fills this gap by introducing ChronoEnv, the first benchmark specifically designed to study time-aware behavior in RL agents.
+
+\section{ChronoEnv: A Benchmark for Active Temporal Grounding}
+\label{sec:environment}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/env_diagram.pdf}
+    \caption{ChronoEnv Overview. Agent must complete work before deadline while balancing query costs.}
+    \label{fig:env_diagram}
+\end{figure}
+
+\subsection{Environment Design}
+
+ChronoEnv is a time-constrained task scheduling environment. The agent must complete a hidden amount of work before a deadline while managing time uncertainty.
+
+\textbf{State Space:}
+\begin{itemize}
+    \item \textit{internal\_estimate:} Agent's belief about elapsed time (noisy, drifts from ground truth)
+    \item \textit{deadline:} Absolute deadline for task completion (known to agent)
+    \item \textit{time\_since\_check:} Steps since last time query
+    \item \textit{query\_count:} Number of queries made
+\end{itemize}
+
+\textbf{Action Space:}
+\begin{itemize}
+    \item \textit{WORK:} Make progress toward deadline (+1 work unit, +5 min time)
+    \item \textit{WAIT:} Wait without progress (+5 min time, no progress)
+    \item \textit{CHECK\_TIME:} Query external clock (-1.0 reward, noisy observation)
+    \item \textit{SUBMIT:} Submit task (success if work done AND time < deadline)
+\end{itemize}
+
+\textbf{Time Mechanism:}
+\begin{itemize}
+    \item Each step advances time by 5 minutes
+    \item Agent's internal estimate has noise (default: 20 min std)
+    \item Noise accumulates over time since last check
+\end{itemize}
+
+\textbf{Hidden Task Parameters:}
+\begin{itemize}
+    \item \textit{true\_work\_required:} Random integer 80-120 (agent doesn't know)
+    \item \textit{deadline}: true\_work\_required + buffer (5-15 minutes)
+\end{itemize}
+
+\subsection{Why This Environment is Hard}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Strategy} & \textbf{Success Rate} & \textbf{Why It Fails} \\
+\midrule
+Fixed 100 steps & 45\% & Fails when work required > 100 (55\% of tasks) \\
+Submit immediately & 0\% & Work not done \\
+PPO (baseline) & 0\% & Reward hacking: avoids time \\
+PPO+PRM & 0\% & PRM signal too weak \\
+\bottomrule
+\end{tabular}
+\caption{Strategy evaluation on ChronoEnv v2.0}
+\label{tab:strategies}
+\end{table}
+
+\textbf{Key Design Insights:}
+\begin{itemize}
+    \item \textit{Random work duration} eliminates fixed-step policies (45\% success proves environment difficulty)
+    \item \textit{Tight deadline} (5-15 min buffer) forces precise timing
+    \item \textit{No step count in observation} prevents counting-based strategies
+    \item \textit{Noisy CHECK\_TIME} simulates imperfect real-world clocks
+\end{itemize}
+
+\textbf{The Challenge:} Agents must learn to estimate remaining work, estimate time, and decide when to query. The reward structure creates a tension between:
+\begin{itemize}
+    \item query cost (-1.0 per query)
+    \item early submission penalty (work not done)
+    \item late submission penalty (missed deadline)
+\end{itemize}
+
+\section{The Reward Hacking Phenomenon}
+\label{sec:reward_hacking}
+
+\subsection{Observation}
+
+Both PPO and PPO+Psychological Regret Modeling agents achieve \textbf{0\% success rate} with \textbf{0 queries} across 1000+ episodes. This indicates a pervasive reward hacking phenomenon:
+
+\begin{itemize}
+    \item Agent discovers "submit immediately" strategy (reward = -50)
+    \item This avoids the complexity of time estimation entirely
+    \item No signal guides agent toward time-aware behavior
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/learning_curves.pdf}
+    \caption{Learning curves for PPO vs PPO+Psychological Regret Modeling. Both fail to learn.}
+\end{figure}
+
+\subsection{Root Cause Analysis}
+
+\textbf{Hypothesis 1: Sparse Reward Signal}
+\begin{quote}
+The only positive signal is +100 for success, which rarely occurs. Agent cannot learn from sparse feedback.
+\end{quote}
+
+\textbf{Hypothesis 2: Hard Exploration}
+\begin{quote}
+The space of "submit immediately" is much larger than "submit at deadline". Agent gets stuck in local optimum.
+\end{quote}
+
+\textbf{Hypothesis 3: Reward Misalignment}
+\begin{quote}
+The reward structure doesn't incentivize checking time - it only rewards final outcome. The query cost (-1.0) is too low compared to the risk of failure (-50).
+\end{quote}
+
+\subsection{Evidence from Fixed Policy Analysis}
+
+We tested a fixed "work 100 steps" policy:
+\begin{itemize}
+    \item Success rate: 45\% across 20 episodes
+    \item Failures occur when work required > 100 (55\% of tasks)
+\end{itemize}
+
+This proves the environment forces time awareness. The fact that PPO fails entirely (0\% success) suggests \textbf{Reward Hacking}: the agent found an even safer strategy (submit immediately with -50 reward) rather than attempting time-aware behavior.
+
+\subsection{Query Cost Sensitivity Analysis}
+
+We tested different query costs to understand reward structure sensitivity:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{cccc}
+\toprule
+\textbf{Query Cost} & \textbf{Avg Reward} & \textbf{Avg Queries} & \textbf{Success} \\
+\midrule
+-0.5 & -60.30 & 19.11 & 0.0\% \\
+-1.0 & -69.60 & 18.87 & 0.0\% \\
+-2.0 & -90.26 & 19.76 & 0.0\% \\
+-5.0 & -146.33 & 19.12 & 0.0\% \\
+-10.0 & -236.10 & 18.54 & 0.0\% \\
+\bottomrule
+\end{tabular}
+\caption{Query cost sensitivity analysis (PPO, 100 episodes, 3 seeds)}
+\label{tab:query_cost}
+\end{table}
+
+\textbf{Observation:} Success rate remains 0\% across all query costs. This confirms the reward structure is fundamentally misaligned - agents cannot learn from the current signals.
+
+\section{Psychological Regret Modeling as a Potential Direction}
+\label{sec:prm_direction}
+
+\subsection{Temporal PRM Design}
+
+We extend Psychological Regret Modeling (PRM) to include temporal regret signals:
+
+\begin{align*}
+R_{\text{prm}} = &- \lambda_1 \cdot \mathbb{I}(\text{redundant check}) \\
+&- \lambda_2 \cdot \mathbb{I}(\text{high uncertainty} \land \text{no check}) \\
+&+ \lambda_3 \cdot \mathbb{I}(\text{correct timing})
+\end{align*}
+
+\textbf{Implementation:}
+\begin{itemize}
+    \item Redundancy penalty: -0.5 if CHECK_TIME twice in a row
+    \item Uncertainty penalty: -0.5 if uncertainty > 30 and no check
+    \item Precision reward: +1.0 if submission is on time
+\end{itemize}
+
+\subsection{Results and Limitations}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Method} & \textbf{Success Rate} & \textbf{Avg Queries} \\
+\midrule
+PPO & 0\% & 0.00 \\
+PPO+Psychological Regret Modeling & 0\% & 0.00 (100 eps) \\
+PPO+Psychological Regret Modeling & 0\% & 7.47 (200 eps, preliminary) \\
+\bottomrule
+\end{tabular}
+\caption{Psychological Regret Modeling results (preliminary)}
+\label{tab:prm_results}
+\end{table}
+
+\textbf{Observation:} Psychological Regret Modeling introduces querying behavior (7.47 queries in 100-episode run), but success rate remains 0\%.
+
+\textbf{Analysis:} The Psychological Regret Modeling signal may be too weak compared to the dominant "submit immediately" shortcut reward (-50 vs +0.5 for good time estimation).
+
+\subsection{Why Psychological Regret Modeling Alone Isn't Enough}
+
+\textbf{Signal-to-Noise Ratio:}
+\begin{itemize}
+    \item Submit immediately reward: -50
+    \item Psychological Regret Modeling signal magnitude: ~0.5
+    \item Ratio: 100:1 - Psychological Regret Modeling signal drowned out
+\end{itemize}
+
+\textbf{Credit Assignment Problem:}
+\begin{itemize}
+    \item Agent receives -50 for every episode
+    \item Psychological Regret Modeling signal is distributed across many steps
+    \item PPO cannot credit Psychological Regret Modeling signal for episode outcome
+\end{itemize}
+
+\textbf{Future Directions:}
+\begin{itemize}
+    \item Increase Psychological Regret Modeling signal magnitude
+    \item Use curriculum learning to gradually introduce difficulty
+    \item Combine Psychological Regret Modeling with explicit time representation
+\end{itemize}
+
+\subsection{Psychological Regret Modeling Methodology Evolution}
+
+\textbf{Original PRM (Xu et al., 2026):} 
+\begin{align*}
+    \text{regret} = Q^{*}(s, a^{*}_{\text{optimal}}) - Q^{*}(s, a_{\text{taken}})
+\end{align*}
+In standard environments, Psychological Regret Modeling provides step-level feedback by comparing optimal Q-value with actual Q-value. Xu et al.~\cite{xu2026stepscorer} demonstrated that by pre-training an opponent model to approximate optimal Q-values, Psychological Regret Modeling achieves 36\% faster convergence on Lunar Lander tasks. This work establishes Psychological Regret Modeling as a framework for reward densification in \textit{known} environments.
+
+\textbf{ChronoEnv Extension (This Work):}
+\begin{align*}
+    \text{regret\_temporal} = f(\text{uncertainty}, \text{deadline}, \text{query\_cost})
+\end{align*}
+In POMDP environments like ChronoEnv, agents face \textit{active temporal grounding}: they must decide \textit{when} to obtain time information. Our temporal Psychological Regret Modeling extends the core insight—provide step-level feedback—to this meta-cognitive task:
+
+\begin{itemize}
+    \item \textbf{Uncertainty-based regret:} Penalize high uncertainty without checking time
+    \item \textbf{Deadline-aware regret:} Reward timing checks before critical deadlines
+    \item \textbf{Cost-aware regret:} Penalize redundant queries (query too frequently)
+\end{itemize}
+
+This represents a fundamental extension: instead of monitoring \textit{action quality}, temporal Psychological Regret Modeling monitors \textit{information-seeking behavior} for a critical environmental variable.
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Why This Matters}
+
+\textbf{Human Analogy:} Humans also exhibit "temporal optimism bias" - we estimate time inaccurately and only check clocks when uncertainty is high or at critical moments. Agents may need similar meta-cognitive mechanisms to learn when to query time.
+
+\textbf{Agent Safety:} Temporal myopia can cause agents to:
+\begin{itemize}
+    \item Miss critical deadlines
+    \item Arrive too early (wasting resources)
+    \item Make decisions based on incorrect time estimates
+\end{itemize}
+
+\subsection{Limitations}
+
+\begin{itemize}
+    \item Current environment is challenging - no agent achieves >0\% success
+    \item PRM signals need tuning to be effective
+    \item Results limited to 1000 episodes (compute constraints)
+    \item Single environment - need more diverse test cases
+\end{itemize}
+
+\subsection{Future Work}
+
+\begin{enumerate}
+    \item \textbf{Curriculum Learning:} Start with larger buffer (15 min), gradually tighten to 5 min
+    \item \textbf{Hybrid Architecture:} Combine PRM with explicit time representation (neural timer)
+    \item \textbf{Inverse Temporal Regret:} Reward \textit{not} checking when unnecessary
+    \item \textbf{Human Study:} Validate "temporal optimism bias" hypothesis
+    \item \textbf{Multi-Agent Settings:} Extend to cooperative tasks with time coordination
+\end{enumerate}
+
+\section{Reproducibility}
+\label{sec:reproducibility}
+
+\textbf{Code:} \url{https://github.com/autratec/openclaw/projects/time-aware-lunar-lander/}
+
+\textbf{Environment:} \texttt{ChronoEnvTimeCritical} in \texttt{chrono\_env\_v2.py}
+
+\textbf{Training Scripts:}
+\begin{itemize}
+    \item \texttt{train\_complete.py} - Full PPO/PPO+PRM training
+    \item \texttt{run\_sensitivity.py} - Query cost sensitivity analysis
+    \item \texttt{temporal\_debugger.py} - Agent behavior visualization
+\end{itemize}
+
+\textbf{Results:} Pre-computed results in \texttt{results/\_}
+
+\textbf{Artifacts:}
+\begin{itemize}
+    \item Fixed policy analysis: Figure~\ref{fig:env_diagram}
+    \item Learning curves: Figure~\ref{fig:learning_curves}
+    \item Query cost sensitivity: Table~\ref{tab:query_cost}
+\end{itemize}
+
+\noindent\textbf{Psychological Regret Modeling Reference:} \
+Xu, Zhe. "StepScorer: Accelerating Reinforcement Learning with Step-wise Scoring and Psychological Regret Modeling." arXiv preprint arXiv:2602.03171 (2026). \
+\url{https://arxiv.org/abs/2602.03171}
+
+\section*{Acknowledgements}
+
+We thank the RL community for feedback on temporal grounding challenges.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

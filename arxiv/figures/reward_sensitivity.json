@@ -1,0 +1,137 @@
+[
+  {
+    "query_cost": -0.5,
+    "seed": 0,
+    "episodes": 100,
+    "avg_reward": -79.638,
+    "avg_queries": 57.31,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -0.5,
+    "seed": 1,
+    "episodes": 100,
+    "avg_reward": -51.01499999999998,
+    "avg_queries": 0.0,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -0.5,
+    "seed": 2,
+    "episodes": 100,
+    "avg_reward": -50.25,
+    "avg_queries": 0.02,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -1.0,
+    "seed": 0,
+    "episodes": 100,
+    "avg_reward": -107.521,
+    "avg_queries": 56.6,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -1.0,
+    "seed": 1,
+    "episodes": 100,
+    "avg_reward": -51.012,
+    "avg_queries": 0.0,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -1.0,
+    "seed": 2,
+    "episodes": 100,
+    "avg_reward": -50.279,
+    "avg_queries": 0.01,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -2.0,
+    "seed": 0,
+    "episodes": 100,
+    "avg_reward": -169.465,
+    "avg_queries": 59.25,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -2.0,
+    "seed": 1,
+    "episodes": 100,
+    "avg_reward": -51.028999999999996,
+    "avg_queries": 0.01,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -2.0,
+    "seed": 2,
+    "episodes": 100,
+    "avg_reward": -50.28500000000001,
+    "avg_queries": 0.01,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -5.0,
+    "seed": 0,
+    "episodes": 100,
+    "avg_reward": -337.61699999999996,
+    "avg_queries": 57.33,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -5.0,
+    "seed": 1,
+    "episodes": 100,
+    "avg_reward": -51.019,
+    "avg_queries": 0.0,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -5.0,
+    "seed": 2,
+    "episodes": 100,
+    "avg_reward": -50.355,
+    "avg_queries": 0.02,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -10.0,
+    "seed": 0,
+    "episodes": 100,
+    "avg_reward": -606.9580000000001,
+    "avg_queries": 55.6,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -10.0,
+    "seed": 1,
+    "episodes": 100,
+    "avg_reward": -51.001999999999995,
+    "avg_queries": 0.0,
+    "success_rate": 0.0,
+    "use_prm": false
+  },
+  {
+    "query_cost": -10.0,
+    "seed": 2,
+    "episodes": 100,
+    "avg_reward": -50.34299999999999,
+    "avg_queries": 0.01,
+    "success_rate": 0.0,
+    "use_prm": false
+  }
+]
