@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.4)  23 FEB 2026 11:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.4)  23 FEB 2026 16:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -318,9 +318,88 @@ Package: natbib 2010/09/13 8.31b (PWD, AO)
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count291
 )
+
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.15 \texttt
+            {jeff_z_xu@yahoo.com} \\
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.15 \texttt{jeff_z_xu@yahoo.com}
+                                  \\
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 1
+5.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+! Missing $ inserted.
+<inserted text> 
+                $
+l.15 \texttt{jeff_z_xu@yahoo.com}
+                                  \\
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+LaTeX Font Info:    Trying to load font information for U+msa on input line 15.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 15.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+! Double subscript.
+<argument> jeff_z_
+                  xu@yahoo.com
+l.15 \texttt{jeff_z_xu@yahoo.com}
+                                  \\
+I treat `x_1_2' essentially like `x_1{}_2'.
+
+! Extra }, or forgotten $.
+<recently read> \egroup 
+                        
+l.15 \texttt{jeff_z_xu@yahoo.com}
+                                  \\
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.17 
+     
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--17
+
+ []
+
 LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 2
 0.
-
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
@@ -381,27 +460,10 @@ Package hyperref Info: Link coloring OFF on input line 20.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 23.
-
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 23.
-
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 2
-3.
-
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [1
+ [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-di
-st/fonts/enc/dvips/base/8r.enc}]
+st/fonts/enc/dvips/base/8r.enc}] [2]
 Overfull \hbox (1.28006pt too wide) in paragraph at lines 46--47
 \OT1/ptm/m/n/10.95 progress with time query-ing costs. The en-vi-ron-ment elim-
 i-nates time-agnostic
@@ -420,72 +482,72 @@ g sig-nals can be drowned
  []
 
 
-LaTeX Warning: Reference `sec:prm_direction' on page 2 undefined on input line 
+LaTeX Warning: Reference `sec:prm_direction' on page 3 undefined on input line 
 55.
 
 
-LaTeX Warning: Reference `sec:discussion' on page 2 undefined on input line 55.
+LaTeX Warning: Reference `sec:discussion' on page 3 undefined on input line 55.
 
 
 
-Package natbib Warning: Citation `le2018delay' on page 2 undefined on input lin
+Package natbib Warning: Citation `le2018delay' on page 3 undefined on input lin
 e 60.
 
 
-Package natbib Warning: Citation `balu2018temporal' on page 2 undefined on inpu
+Package natbib Warning: Citation `balu2018temporal' on page 3 undefined on inpu
 t line 60.
 
 
-Package natbib Warning: Citation `sutton1998reinforcement' on page 2 undefined 
+Package natbib Warning: Citation `sutton1998reinforcement' on page 3 undefined 
 on input line 60.
 
 
-Package natbib Warning: Citation `perozzi2024test' on page 2 undefined on input
+Package natbib Warning: Citation `perozzi2024test' on page 3 undefined on input
  line 60.
 
 
-Package natbib Warning: Citation `meng2025tgpo' on page 2 undefined on input li
+Package natbib Warning: Citation `meng2025tgpo' on page 3 undefined on input li
 ne 60.
 
-[2]
+[3]
 
-Package natbib Warning: Citation `xu2026stepscorer' on page 3 undefined on inpu
+Package natbib Warning: Citation `xu2026stepscorer' on page 4 undefined on inpu
 t line 62.
 
 
-Package natbib Warning: Citation `xu2026stepscorer' on page 3 undefined on inpu
+Package natbib Warning: Citation `xu2026stepscorer' on page 4 undefined on inpu
 t line 62.
 
 
-Package natbib Warning: Citation `xu2026stepscorer' on page 3 undefined on inpu
+Package natbib Warning: Citation `xu2026stepscorer' on page 4 undefined on inpu
 t line 64.
 
 
-Package natbib Warning: Citation `amodei2016concrete' on page 3 undefined on in
+Package natbib Warning: Citation `amodei2016concrete' on page 4 undefined on in
 put line 66.
 
 
-Package natbib Warning: Citation `deepmind2020specification' on page 3 undefine
+Package natbib Warning: Citation `deepmind2020specification' on page 4 undefine
 d on input line 66.
 
 
-Package natbib Warning: Citation `amodei2016concrete' on page 3 undefined on in
+Package natbib Warning: Citation `amodei2016concrete' on page 4 undefined on in
 put line 66.
 
 
-Package natbib Warning: Citation `deepmind2020specification' on page 3 undefine
+Package natbib Warning: Citation `deepmind2020specification' on page 4 undefine
 d on input line 66.
 
 
-Package natbib Warning: Citation `skalse2022defining' on page 3 undefined on in
+Package natbib Warning: Citation `skalse2022defining' on page 4 undefined on in
 put line 66.
 
 
-Package natbib Warning: Citation `yao2023reAct' on page 3 undefined on input li
+Package natbib Warning: Citation `yao2023reAct' on page 4 undefined on input li
 ne 68.
 
 
-Package natbib Warning: Citation `zhou2023mmmu' on page 3 undefined on input li
+Package natbib Warning: Citation `zhou2023mmmu' on page 4 undefined on input li
 ne 68.
 
 
@@ -493,12 +555,15 @@ Overfull \hbox (7.42679pt too wide) in paragraph at lines 70--70
 []\OT1/ptm/b/n/14.4 ChronoEnv: A Bench-mark for Ac-tive Tem-po-ral Ground-
  []
 
-<figures/env_diagram.pdf, id=24, 578.16pt x 433.62pt>
+<figures/env_diagram.pdf, id=32, 578.16pt x 433.62pt>
 File: figures/env_diagram.pdf Graphic file (type pdf)
 <use figures/env_diagram.pdf>
 Package pdftex.def Info: figures/env_diagram.pdf  used on input line 75.
 (pdftex.def)             Requested size: 288.0011pt x 215.99564pt.
-[3]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[4]
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 8
 6.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
@@ -509,18 +574,18 @@ Overfull \hbox (6.43773pt too wide) in paragraph at lines 86--87
 out elapsed time (noisy, drifts from ground
  []
 
-[4 <./figures/env_diagram.pdf>]
+[5 <./figures/env_diagram.pdf>]
 Overfull \hbox (30.338pt too wide) in paragraph at lines 117--127
  [][] 
  []
 
-[5]
-<figures/learning_curves.pdf, id=75, 578.16pt x 361.35pt>
+[6]
+<figures/learning_curves.pdf, id=82, 578.16pt x 361.35pt>
 File: figures/learning_curves.pdf Graphic file (type pdf)
 <use figures/learning_curves.pdf>
 Package pdftex.def Info: figures/learning_curves.pdf  used on input line 161.
 (pdftex.def)             Requested size: 251.9989pt x 157.49475pt.
- [6 <./figures/learning_curves.pdf>] [7]
+ [7 <./figures/learning_curves.pdf>] [8]
 ! Missing $ inserted.
 <inserted text> 
                 $
@@ -618,10 +683,10 @@ Overfull \hbox (79.81834pt too wide) in paragraph at lines 239--248
  [][] 
  []
 
-[8]
+[9]
 
-Package natbib Warning: Citation `xu2026stepscorer' on page 9 undefined on inpu
-t line 285.
+Package natbib Warning: Citation `xu2026stepscorer' on page 10 undefined on inp
+ut line 285.
 
 
 Overfull \hbox (0.13072pt too wide) in paragraph at lines 284--286
@@ -629,7 +694,7 @@ Overfull \hbox (0.13072pt too wide) in paragraph at lines 284--286
 el-ing pro-vides step-level feed-
  []
 
-[9]
+[10]
 Overfull \hbox (1.95839pt too wide) in paragraph at lines 328--329
 []\OT1/ptm/b/n/10.95 Hybrid Ar-chi-tec-ture: \OT1/ptm/m/n/10.95 Com-bine PRM wi
 th ex-plicit time rep-re-sen-ta-tion (neu-
@@ -641,17 +706,17 @@ Overfull \hbox (38.96252pt too wide) in paragraph at lines 337--338
 tec / openclaw / tree / main / projects /
  []
 
-[10]
+[11]
 
-LaTeX Warning: Reference `fig:env_diagram' on page 11 undefined on input line 3
+LaTeX Warning: Reference `fig:env_diagram' on page 12 undefined on input line 3
 52.
 
 
-LaTeX Warning: Reference `fig:learning_curves' on page 11 undefined on input li
+LaTeX Warning: Reference `fig:learning_curves' on page 12 undefined on input li
 ne 353.
 
 
-LaTeX Warning: Reference `tab:query_cost' on page 11 undefined on input line 35
+LaTeX Warning: Reference `tab:query_cost' on page 12 undefined on input line 35
 4.
 
 (./paper.bbl
@@ -660,11 +725,11 @@ Underfull \hbox (badness 2245) in paragraph at lines 4--7
 T1/ptm/m/it/10.95 arXiv preprint
  []
 
-[11])
+[12])
 
 Package natbib Warning: There were undefined citations.
 
-[12] (./paper.aux
+[13] (./paper.aux
 
 Package natbib Warning: Citation(s) may have changed.
 (natbib)                Rerun to get citations correct.
@@ -704,29 +769,33 @@ Package rerunfilecheck Warning: File `paper.out' has changed.
 Package rerunfilecheck Info: Checksums for `paper.out':
 (rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
 (rerunfilecheck)             After:  9EB2A7E71B14B9FA356C88BBE8088A8C;4031.
- ) 
+ )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 15 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 11565 strings out of 474222
- 180187 string characters out of 5748734
+ 11566 strings out of 474222
+ 180196 string characters out of 5748734
  1932975 words of memory out of 5000000
- 33608 multiletter control sequences out of 15000+600000
- 584417 words of font info for 89 fonts, out of 8000000 for 9000
+ 33609 multiletter control sequences out of 15000+600000
+ 583902 words of font info for 87 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,11n,79p,1152b,555s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/
-utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (12 pages, 171589 bytes).
+ 75i,11n,79p,1152b,1717s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/u
+tmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on paper.pdf (13 pages, 172832 bytes).
 PDF statistics:
- 256 PDF objects out of 1000 (max. 8388607)
- 154 compressed objects within 2 object streams
- 62 named destinations out of 1000 (max. 500000)
+ 261 PDF objects out of 1000 (max. 8388607)
+ 158 compressed objects within 2 object streams
+ 63 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
