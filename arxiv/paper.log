@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.4)  23 FEB 2026 11:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.2.4)  23 FEB 2026 11:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -419,12 +419,81 @@ Overfull \hbox (3.5584pt too wide) in paragraph at lines 50--51
 g sig-nals can be drowned
  []
 
+
+LaTeX Warning: Reference `sec:prm_direction' on page 2 undefined on input line 
+55.
+
+
+LaTeX Warning: Reference `sec:discussion' on page 2 undefined on input line 55.
+
+
+
+Package natbib Warning: Citation `le2018delay' on page 2 undefined on input lin
+e 60.
+
+
+Package natbib Warning: Citation `balu2018temporal' on page 2 undefined on inpu
+t line 60.
+
+
+Package natbib Warning: Citation `sutton1998reinforcement' on page 2 undefined 
+on input line 60.
+
+
+Package natbib Warning: Citation `perozzi2024test' on page 2 undefined on input
+ line 60.
+
+
+Package natbib Warning: Citation `meng2025tgpo' on page 2 undefined on input li
+ne 60.
+
 [2]
+
+Package natbib Warning: Citation `xu2026stepscorer' on page 3 undefined on inpu
+t line 62.
+
+
+Package natbib Warning: Citation `xu2026stepscorer' on page 3 undefined on inpu
+t line 62.
+
+
+Package natbib Warning: Citation `xu2026stepscorer' on page 3 undefined on inpu
+t line 64.
+
+
+Package natbib Warning: Citation `amodei2016concrete' on page 3 undefined on in
+put line 66.
+
+
+Package natbib Warning: Citation `deepmind2020specification' on page 3 undefine
+d on input line 66.
+
+
+Package natbib Warning: Citation `amodei2016concrete' on page 3 undefined on in
+put line 66.
+
+
+Package natbib Warning: Citation `deepmind2020specification' on page 3 undefine
+d on input line 66.
+
+
+Package natbib Warning: Citation `skalse2022defining' on page 3 undefined on in
+put line 66.
+
+
+Package natbib Warning: Citation `yao2023reAct' on page 3 undefined on input li
+ne 68.
+
+
+Package natbib Warning: Citation `zhou2023mmmu' on page 3 undefined on input li
+ne 68.
+
+
 Overfull \hbox (7.42679pt too wide) in paragraph at lines 70--70
 []\OT1/ptm/b/n/14.4 ChronoEnv: A Bench-mark for Ac-tive Tem-po-ral Ground-
  []
 
-<figures/env_diagram.pdf, id=126, 578.16pt x 433.62pt>
+<figures/env_diagram.pdf, id=24, 578.16pt x 433.62pt>
 File: figures/env_diagram.pdf Graphic file (type pdf)
 <use figures/env_diagram.pdf>
 Package pdftex.def Info: figures/env_diagram.pdf  used on input line 75.
@@ -446,7 +515,7 @@ Overfull \hbox (30.338pt too wide) in paragraph at lines 117--127
  []
 
 [5]
-<figures/learning_curves.pdf, id=184, 578.16pt x 361.35pt>
+<figures/learning_curves.pdf, id=75, 578.16pt x 361.35pt>
 File: figures/learning_curves.pdf Graphic file (type pdf)
 <use figures/learning_curves.pdf>
 Package pdftex.def Info: figures/learning_curves.pdf  used on input line 161.
@@ -550,6 +619,11 @@ Overfull \hbox (79.81834pt too wide) in paragraph at lines 239--248
  []
 
 [8]
+
+Package natbib Warning: Citation `xu2026stepscorer' on page 9 undefined on inpu
+t line 285.
+
+
 Overfull \hbox (0.13072pt too wide) in paragraph at lines 284--286
 \OT1/ptm/m/n/10.95 In stan-dard en-vi-ron-ments, Psy-cho-log-i-cal Re-gret Mod-
 el-ing pro-vides step-level feed-
@@ -569,10 +643,48 @@ tec / openclaw / tree / main / projects /
 
 [10]
 
+LaTeX Warning: Reference `fig:env_diagram' on page 11 undefined on input line 3
+52.
+
+
 LaTeX Warning: Reference `fig:learning_curves' on page 11 undefined on input li
 ne 353.
 
-(./paper.bbl [11]) [12] (./paper.aux)
+
+LaTeX Warning: Reference `tab:query_cost' on page 11 undefined on input line 35
+4.
+
+(./paper.bbl
+Underfull \hbox (badness 2245) in paragraph at lines 4--7
+[]\OT1/ptm/m/n/10.95 Dario Amodei et al.  Con-crete prob-lems in ai safety.  \O
+T1/ptm/m/it/10.95 arXiv preprint
+ []
+
+[11])
+
+Package natbib Warning: There were undefined citations.
+
+[12] (./paper.aux
+
+Package natbib Warning: Citation(s) may have changed.
+(natbib)                Rerun to get citations correct.
+
+
+! Package natbib Error: Bibliography not compatible with author-year citations.
+
+(natbib)                Press <return> to continue in numerical citation style.
+
+
+See the natbib package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.71 ...mand\NAT@force@numbers{}\NAT@force@numbers
+                                                  
+Check the bibliography entries for non-compliant syntax,
+or select author-year BibTeX style, e.g. plainnat
+
+)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
@@ -581,17 +693,26 @@ L3 programming layer <2024-01-22>
 
 LaTeX Warning: There were undefined references.
 
-Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 9EB2A7E71B14B9FA356C88BBE8088A8C;4031.
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `paper.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `paper.out':
+(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
+(rerunfilecheck)             After:  9EB2A7E71B14B9FA356C88BBE8088A8C;4031.
  ) 
 Here is how much of TeX's memory you used:
- 11588 strings out of 474222
- 180506 string characters out of 5748734
+ 11565 strings out of 474222
+ 180187 string characters out of 5748734
  1932975 words of memory out of 5000000
- 33631 multiletter control sequences out of 15000+600000
+ 33608 multiletter control sequences out of 15000+600000
  584417 words of font info for 89 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,11n,79p,1152b,565s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,11n,79p,1152b,555s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share
 /texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texliv
@@ -602,10 +723,10 @@ pe1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/
 utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (12 pages, 174637 bytes).
+Output written on paper.pdf (12 pages, 171589 bytes).
 PDF statistics:
- 344 PDF objects out of 1000 (max. 8388607)
- 241 compressed objects within 3 object streams
+ 256 PDF objects out of 1000 (max. 8388607)
+ 154 compressed objects within 2 object streams
  62 named destinations out of 1000 (max. 500000)
- 187 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
