@@ -22,7 +22,7 @@
 \maketitle
 
 \begin{abstract}
-We observe that autonomous agents (including LLM-based and standard RL agents) often fail to track physical time across multi-turn interactions, completing tasks at strange times (e.g., submitting at 3:30 when deadline is 4:00). To study this \textit{temporal grounding} failure, we introduce \textbf{ChronoEnv}, a time-critical RL benchmark that forces agents to balance task completion against the cost of querying external time. While motivated by observations of LLM agents, we use standard RL agents (PPO/PRM) in ChronoEnv as a controlled proxy to isolate temporal grounding mechanisms from language modeling complexities. Our experiments reveal a pervasive \textit{reward hacking} phenomenon: both Proximal Policy Optimization (PPO) and PPO+Psychological Regret Modeling (PRM) agents discover time-agnostic shortcuts and achieve 0\% success. We analyze root causes (sparse rewards, hard exploration, misaligned incentives) and demonstrate that Psychological Regret Modeling provides some guidance but is insufficient. We open-source ChronoEnv and diagnostic tools to catalyze research on time-aware agents.
+We observe that autonomous agents (including LLM-based and standard RL agents) often fail to track physical time across multi-turn interactions, completing tasks at strange times (e.g., submitting at 3:30 when deadline is 4:00). To study this \textit{temporal grounding} failure, we introduce \textbf{ChronoEnv}, a time-critical RL benchmark that forces agents to balance task completion against the cost of querying external time. While motivated by observations of LLM-based agents, this study uses standard RL agents (PPO/PRM) in ChronoEnv as a controlled proxy to isolate temporal grounding mechanisms from language modeling complexities. Our experiments reveal a pervasive \textit{reward hacking} phenomenon: both Proximal Policy Optimization (PPO) and PPO+Psychological Regret Modeling (PRM) agents discover time-agnostic shortcuts and achieve 0\% success. We analyze root causes (sparse rewards, hard exploration, misaligned incentives) and demonstrate that Psychological Regret Modeling provides some guidance but is insufficient. We open-source ChronoEnv and diagnostic tools to catalyze research on time-aware agents.
 
 \textbf{Keywords:} Temporal Grounding, Reward Hacking, Psychological Regret Model, RL Benchmark, LLM Agents
 \end{abstract}
@@ -57,7 +57,7 @@ The remainder of this paper is organized as follows: Section~\ref{sec:prm_direct
 \section{Related Work}
 \label{sec:related_work}
 
-\textbf{Temporal Reasoning in RL.} Existing work on temporal reasoning in RL includes constraint-based methods~\cite{le2018delay}, reward shaping for timing tasks~\cite{balu2018temporal}, and temporal difference learning with discount factors~\cite{sutton1998reinforcement}. More recently, Perozzi et al.~\cite{perozzi2024test} introduced the "Test of Time" benchmark, the first systematic evaluation of LLM temporal reasoning that reveals weaknesses in complex time logic tasks. Our work differs by focusing on \textit{active temporal grounding} - the meta-cognitive task of deciding \textit{when} to obtain time information, rather than just reacting to time signals. TGPO~\cite{meng2025tgpo} also address time-aware policy learning but focus on explicit deadline embedding rather than uncertainty-driven querying.
+\textbf{Temporal Reasoning in RL.} Existing work on temporal reasoning in RL includes constraint-based methods~\cite{le2018delay}, reward shaping for timing tasks~\cite{balu2018temporal}, and temporal difference learning with discount factors~\cite{sutton1998reinforcement}. More recently, Perozzi et al.~\cite{perozzi2024test} introduced the "Test of Time" benchmark, the first systematic evaluation of LLM temporal reasoning that reveals weaknesses in complex time logic tasks. Concurrent work on timely evaluation~\cite{timely2026} addresses related temporal challenges with different focuses (evaluation protocols vs. active querying). TGPO~\cite{meng2025tgpo} also address time-aware policy learning but focus on explicit deadline embedding rather than uncertainty-driven querying. Memory-augmented agents~\cite{memoryt1_2025} address temporal challenges through memory architectures rather than explicit time tracking. Our work differs by focusing on \textit{active temporal grounding} - the meta-cognitive task of deciding \textit{when} to obtain time information, rather than just reacting to time signals.
 
 \textbf{Psychological Regret Modeling.} Psychological Regret Modeling (PRM) extends RL beyond terminal rewards by providing intermediate feedback on decision quality~\cite{xu2026stepscorer}. Xu et al.~\cite{xu2026stepscorer} introduced the Psychological Regret Model (PRM), which incorporates counterfactual regret signals at each decision step to transform sparse rewards into dense feedback, achieving 36\% faster convergence on continuous control tasks. This work establishes PRM as a framework for reward densification in \textit{known} environments. Our work extends PRM by adapting regret signals to partially observable time settings for active temporal grounding.
 
@@ -99,16 +99,19 @@ ChronoEnv is a time-constrained task scheduling environment. The agent must comp
 
 \textbf{Time Mechanism:}
 \begin{itemize}
-    \item Each step advances time by 5 minutes
+    \item Each WORK action completes 1 work unit AND advances time by 5 minutes
     \item Agent's internal estimate has noise (default: 20 min std)
     \item Noise accumulates over time since last check
+    \item The agent's internal time estimate is updated as: $\hat{t}_{k+1} = \hat{t}_k + 5 + \epsilon_k$, where $\epsilon_k \sim \mathcal{N}(0, \sigma^2)$ and $\sigma = 20$ minutes by default. A CHECK\_TIME action resets $\hat{t} \leftarrow t_{\text{true}} + \mathcal{N}(0, \sigma^2)$.
 \end{itemize}
 
 \textbf{Hidden Task Parameters:}
 \begin{itemize}
     \item \textit{true\_work\_required:} Random integer 80-120 (agent doesn't know)
-    \item \textit{deadline}: true\_work\_required + buffer (5-15 minutes)
+    \item \textit{deadline}: $5 \times \text{true\_work\_required} + b$, where $b \sim \text{Uniform}(5, 15)$ minutes
 \end{itemize}
+
+\textbf{Key Design Note:} Each WORK action completes 1 work unit AND advances time by 5 minutes. Thus, a task requiring $w \in [80, 120]$ work units has a minimum completion time of $5w \in [400, 600]$ minutes. The deadline is $d = 5w + b$ where $b \sim \text{Uniform}(5, 15)$ minutes, creating a tight buffer that forces precise time estimation.
 
 \subsection{Why This Environment is Hard}
 
@@ -143,12 +146,23 @@ PPO+PRM & 0\% & PRM signal too weak \\
     \item late submission penalty (missed deadline)
 \end{itemize}
 
+\textbf{Reward Function:} The reward structure is defined as:
+\begin{equation}
+R(s,a,s') = \begin{cases}
++100 - 0.1 \cdot t & \text{if SUBMIT and success} \\
+-50 & \text{if SUBMIT and failure} \\
+-1.0 & \text{if CHECK\_TIME} \\
+-0.1 & \text{if WORK or WAIT}
+\end{cases}
+\end{equation}
+where $t$ is the elapsed time at submission.
+
 \section{The Reward Hacking Phenomenon}
 \label{sec:reward_hacking}
 
 \subsection{Observation}
 
-Both PPO and PPO+Psychological Regret Modeling agents achieve \textbf{0\% success rate} with \textbf{0 queries} across 1000+ episodes. This indicates a pervasive reward hacking phenomenon:
+Both PPO and PPO+Psychological Regret Modeling agents achieve \textbf{0\% success rate}. Notably, PPO agents learn to avoid time queries entirely (0 queries in episodes—though none succeed), while PPO+PRM agents exhibit exploratory querying behavior (7.47$\pm$1.2 queries per episode in preliminary runs) but still fail to coordinate timing. This indicates a pervasive reward hacking phenomenon:
 
 \begin{itemize}
     \item Agent discovers "submit immediately" strategy (reward = -50)
@@ -206,7 +220,7 @@ We tested different query costs to understand reward structure sensitivity:
 -10.0 & -236.10 & 18.54 & 0.0\% \\
 \bottomrule
 \end{tabular}
-\caption{Query cost sensitivity analysis (PPO, 100 episodes, 3 seeds)}
+\caption{Query cost sensitivity analysis (PPO, 100 episodes, 3 seeds). Query counts represent mean $\pm$ std across 3 seeds. '0.00' for PPO indicates no exploratory queries; non-zero for PPO+PRM indicates PRM induces querying behavior even when success remains elusive.}
 \label{tab:query_cost}
 \end{table}
 
@@ -232,6 +246,8 @@ R_{\text{prm}} = &- \lambda_1 \cdot \mathbb{I}(\text{redundant check}) \\
     \item Precision reward: +1.0 if submission is on time
 \end{itemize}
 
+\textbf{Note on Formalization:} Our temporal Psychological Regret Modeling uses indicator-based signals as a practical approximation to value-of-information (VOI) principles. A formal derivation of optimal querying policies under POMDP assumptions is an important theoretical direction we leave to future work.
+
 \subsection{Results and Limitations}
 
 \begin{table}[h]
@@ -245,7 +261,7 @@ PPO+Psychological Regret Modeling & 0\% & 0.00 (100 eps) \\
 PPO+Psychological Regret Modeling & 0\% & 7.47$\pm$1.2 (200 eps, 3 seeds, preliminary) \\
 \bottomrule
 \end{tabular}
-\caption{Psychological Regret Modeling results (preliminary)}
+\caption{Psychological Regret Modeling results (preliminary). Query counts represent mean $\pm$ std across 3 seeds. '0.00' for PPO indicates no exploratory queries; non-zero for PPO+PRM indicates PRM induces querying behavior even when success remains elusive.}
 \label{tab:prm_results}
 \end{table}
 
@@ -319,6 +335,7 @@ This represents a fundamental extension: instead of monitoring \textit{action qu
     \item PRM signals need tuning to be effective
     \item Results limited to 1000 episodes (compute constraints)
     \item Single environment - need more diverse test cases
+    \item Our experiments focus on feedforward PPO/PRM agents to isolate the temporal grounding challenge. We acknowledge that recurrent policies (LSTM/GRU) or heuristic baselines (periodic checking, uncertainty thresholds) may perform better; evaluating these is an important direction for future work.
 \end{itemize}
 
 \subsection{Future Work}
